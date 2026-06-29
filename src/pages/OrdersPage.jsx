@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getOrders } from '../api/ecommerce'
+import { getOrders } from '../services/ecommerce'
 
 const userId = '64b8d3e2f1a9c7b5d6e4f3a2'
 

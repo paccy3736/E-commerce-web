@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { placeOrder } from '../api/ecommerce'
+import { placeOrder } from '../services/ecommerce'
 
 const userId = '64b8d3e2f1a9c7b5d6e4f3a2'
 

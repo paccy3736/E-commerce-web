@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { getCategories, getProducts } from '../api/ecommerce'
+import { getCategories, getProducts } from '../services/ecommerce'
 import { getProductImageUrl } from '../utils/images'
 
 function HomePage() {

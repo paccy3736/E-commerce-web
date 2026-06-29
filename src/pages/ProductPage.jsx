@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
-import { addCartItem, getProductById } from '../api/ecommerce'
+import { addCartItem, getProductById } from '../services/ecommerce'
 import { getProductImageUrl } from '../utils/images'
 const userId = '64b8d3e2f1a9c7b5d6e4f3a2'
 
