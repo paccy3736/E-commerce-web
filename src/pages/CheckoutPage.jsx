@@ -13,24 +13,25 @@ function CheckoutPage() {
 
   const checkoutMutation = useMutation({
     mutationFn: placeOrder,
-    onSuccess: (data) => {
+    onSuccess: (order) => {
       queryClient.invalidateQueries({ queryKey: ['orders'] })
       queryClient.invalidateQueries({ queryKey: ['cart'] })
-      navigate('/confirmation', { state: { order: data?.data ?? data } })
+      navigate('/confirmation', { state: { order } })
     },
     onError: () => setError('Checkout failed. Please double-check the details and try again.'),
   })
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
     if (!form.customerName || !form.email || !form.address) {
       setError('Please fill in your full name, email, and shipping address.')
       return
     }
 
+    setError('')
     checkoutMutation.mutate({
       userId,
-      items: [],
       customerName: form.customerName,
       email: form.email,
       address: form.address,

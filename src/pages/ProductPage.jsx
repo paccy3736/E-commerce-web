@@ -1,36 +1,41 @@
-import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
+import { DEMO_USER_ID } from '../constants/user'
+import { useCartNotification } from '../context/CartNotificationContext'
 import { addCartItem, getProductById } from '../services/ecommerce'
 import { getProductImageUrl } from '../utils/images'
-const userId = '64b8d3e2f1a9c7b5d6e4f3a2'
 
 function ProductPage() {
   const { id } = useParams()
   const queryClient = useQueryClient()
-  const [feedback, setFeedback] = useState('')
+  const { showCartNotification } = useCartNotification()
 
-  const { data: productData, isLoading, error } = useQuery({
+  const { data: product, isLoading, error } = useQuery({
     queryKey: ['product', id],
     queryFn: () => getProductById(id),
     enabled: Boolean(id),
   })
 
-  const product = useMemo(() => productData?.data ?? null, [productData])
+  const variantId = product?.variants?.[0]?.id
 
   const addToCartMutation = useMutation({
     mutationFn: addCartItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cart'] })
-      setFeedback('Added to cart successfully.')
+      showCartNotification(`${product?.name || 'Item'} added to your cart.`, 'success')
     },
     onError: () => {
-      setFeedback('Unable to add this item to the cart right now.')
+      showCartNotification('Unable to add this item to the cart right now.', 'error')
     },
   })
 
   const handleAddToCart = () => {
-    addToCartMutation.mutate({ userId, productId: product.id, quantity: 1 })
+    if (!product || !variantId) {
+      showCartNotification('Unable to add this item to the cart right now.', 'error')
+      return
+    }
+
+    addToCartMutation.mutate({ userId: DEMO_USER_ID, productId: product.id, variantId, quantity: 1 })
   }
 
   if (isLoading) {
@@ -76,7 +81,6 @@ function ProductPage() {
           >
             {addToCartMutation.isPending ? 'Adding…' : 'Add to cart'}
           </button>
-          {feedback && <p className="mt-4 text-sm text-slate-600">{feedback}</p>}
         </div>
       </div>
     </div>

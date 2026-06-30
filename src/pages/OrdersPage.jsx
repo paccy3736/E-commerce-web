@@ -9,7 +9,7 @@ function OrdersPage() {
     queryFn: () => getOrders(userId),
   })
 
-  const orders = data?.data ?? []
+  const orders = data ?? []
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
